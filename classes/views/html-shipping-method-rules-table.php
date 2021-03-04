@@ -44,7 +44,7 @@
 	);
 	$value = '';
 	$field_cost_per_order = woocommerce_form_field( $key, $args, wc_format_localized_price( $value ) );
-			
+
 	$field_id = '<label id="method_rules[xxx][id]" name="method_rules[xxx][id]"></label> ';
 
 	$count_rules = 0;
@@ -103,7 +103,7 @@
             							$value = $rule['id'];
             						}
             						woocommerce_form_field( $key, $args, $value );
-            					?>	
+            					?>
 							</td>
             				<td class="based_on">
             					<?php
@@ -214,7 +214,7 @@
 				});
 				//Select row
 				var tid='';
-				jQuery('#<?php echo esc_attr( $field ); ?> tbody tr').live('click', function (event) {
+				jQuery('document').on('click', '#<?php echo esc_attr( $field ); ?> tbody tr' function (event) {
 					tid=jQuery(this).attr('id');
 					jQuery('.selected').removeClass('selected');
     				jQuery('#' + tid).addClass("selected");
@@ -231,8 +231,8 @@
 
 					//Save the table as a json in order to access it later with the options API
 					var rules = [];
-					for (i = 0; i < append_id; i++) { 
-						
+					for (i = 0; i < append_id; i++) {
+
 						var j = i+1;
 						var id = jQuery("#method_rules\\[" + j + "\\]\\[id\\]").val();
 						var based_on = jQuery("#method_rules\\[" + j + "\\]\\[based_on\\]").val();
@@ -260,7 +260,7 @@
 						 remove_notices();
 					 }
 					 var higherMax = -1;
-					 for (i = 0; i < append_id; i++) { 
+					 for (i = 0; i < append_id; i++) {
 						var j = i+1
 						var based_on = jQuery("#method_rules\\[" + j + "\\]\\[based_on\\]").val();
 						var max = jQuery("#method_rules\\[" + j + "\\]\\[max\\]").val();
@@ -273,7 +273,7 @@
 						jQuery("#woocommerce_<?php echo esc_html($this->id) ?>_max_weigth").val(higherMax);
 						remove_notice_with_timer();
 					 }
-					 
+
 				});
 				//Default cost
 				jQuery("#woocommerce_<?php echo esc_html($this->id) ?>_default_cost").blur( function() {
@@ -284,14 +284,14 @@
 					 } else {
 						remove_notices();
 					 }
-					 
+
 				});
 				//Add listener to existing rules
 				for (i = 0; i < append_id; i++) {
 					j = i+1;
 					addMaxWeigthListener(j);
 				}
-				
+
             	jQuery('#mainform').attr('action', '<?php echo remove_query_arg( 'added', add_query_arg( 'added', '1' ) ); ?>' );
 			});
 			function addMaxWeigthListener(id){
