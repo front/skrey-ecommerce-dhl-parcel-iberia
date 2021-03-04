@@ -27,7 +27,7 @@ class DhlClient{
         $auth->key = $options['wsc_key'];
 
         return $auth;
-        
+
     }
     private function getTokenCallBack(){
         $callback = function($token){
@@ -78,18 +78,18 @@ class DhlClient{
                 $pShop = $this->getParcelShop($pShopOrderInfo['sp_id'], $pShopOrderInfo['sp_country']);
 
                 $labelDTO->setServicePoint($pShop->id);
-                
+
                 $receiver->name->companyName = "";
-                
+
                 $receiver->address->countryCode = $pShop->address->countryCode;
-                $receiver->address->postalCode = $pShop->address->zipCode; 
-                $receiver->address->city = $pShop->address->city; 
+                $receiver->address->postalCode = $pShop->address->zipCode;
+                $receiver->address->city = $pShop->address->city;
                 $receiver->address->street = $pShop->address->street;
                 $receiver->address->number = $pShop->address->number;
                 $receiver->address->isBusiness = false;
                 $receiver->name->firstName = $order->get_shipping_first_name();
                 $receiver->name->lastName = $order->get_shipping_last_name();
-                
+
             }catch(Exception $e){
                 throw($e);
             }
@@ -98,10 +98,10 @@ class DhlClient{
 
             $receiver->name->firstName = $order->get_shipping_first_name();
             $receiver->name->lastName =  $order->get_shipping_last_name();
-            
+
             $receiver->address->countryCode = $order->get_shipping_country();
-            $receiver->address->postalCode = $order->get_shipping_postcode(); 
-            $receiver->address->city = $order->get_shipping_city(); 
+            $receiver->address->postalCode = $order->get_shipping_postcode();
+            $receiver->address->city = $order->get_shipping_city();
             $receiver->address->street = $order->get_shipping_address_1();
             $receiver->address->addition = $order->get_shipping_address_2();
             $receiver->address->isBusiness = false;
@@ -122,9 +122,9 @@ class DhlClient{
 
         $labelDTO->accountId =  $options['wsc_account_id'];
         $labelDTO->returnLabel = false;
-        
+
         $meta_data = $order->get_meta_data();
-        $order_weigh = get_data_from_meta_data($meta_data,'_cart_weight');
+        $order_weigh = dhl_parcel_get_data_from_meta_data($meta_data,'_cart_weight');
         $labelDTO->weight = $order_weigh;
 
         //Cash_on_delivery
@@ -133,7 +133,7 @@ class DhlClient{
         }
 
         //Reference
-        $reference_field = get_data_from_meta_data($meta_data,'_reference_field');
+        $reference_field = dhl_parcel_get_data_from_meta_data($meta_data,'_reference_field');
         if($reference_field){
             $labelDTO->setReference(strval($reference_field));
         } else {
@@ -205,7 +205,7 @@ class DhlClient{
     private function createParcelShopLocQueryDTO($params){
         $dto = new ParcelShopLocQueryDTO();
         $capabilityList =  new CapabilitiesListExtd(); //??
-        
+
         if(array_key_exists('zipcode',$params))$dto->zipCode=$params['zipcode'];
         if(array_key_exists('countryCode',$params))$dto->countryCode=$params['countryCode'];
         if(array_key_exists('city',$params))$dto->city=$params['city'];
@@ -219,7 +219,7 @@ class DhlClient{
         try{
             $order = wc_get_order($id_order);
             $isParcel = $this->getServicePointId($order) != null;
-            $exporter = new ParcelShopOrderExport($this->getAuthDto(),$this->getTokenCallBack()); 
+            $exporter = new ParcelShopOrderExport($this->getAuthDto(),$this->getTokenCallBack());
 
             $labelDTO =$this->createLabelDTO($id_order, $isParcel);
             $json =json_decode($exporter->createLabel($labelDTO));
@@ -233,8 +233,8 @@ class DhlClient{
         try{
             $order = wc_get_order($id_order);
             $isParcel = $this->getServicePointId($order) != null;
-            $exporter = new ParcelShopOrderExport($this->getAuthDto(),$this->getTokenCallBack()); 
- 
+            $exporter = new ParcelShopOrderExport($this->getAuthDto(),$this->getTokenCallBack());
+
             $labelDTO =$this->createLabelDTO($id_order, $isParcel, true);
 
             $json =json_decode($exporter->createReturnLabel($labelDTO));
@@ -242,7 +242,7 @@ class DhlClient{
             throw($e);
         }
         return $json;
-        
+
     }
 
     public function createPickUpRequest($id_order, $cron = false){
@@ -264,7 +264,7 @@ class DhlClient{
                     return;
                 }
                 error_log("REQUEST SEND: ". json_encode($dto));
-                $json = json_decode($pickup_ws->createPickupReq($dto)); 
+                $json = json_decode($pickup_ws->createPickupReq($dto));
                 error_log("RESPONSE RECEIVED: ". json_encode($json));
 
                 $dbh = new Database_Handler();
@@ -273,7 +273,7 @@ class DhlClient{
                 }else{
                     $dbh->insert_pickup_request($id_order, $dto->pickupDate, (int)isset($json->id));
                 }
-                
+
             }
             catch(Exception $e){
                 throw($e);
@@ -296,10 +296,10 @@ class DhlClient{
 
     public function getParcelShopPostcode($parcel_shop_id, $country_code){
         try{
-            $parcelWS =new ParcelShopLocationWSServices($this->getAuthDto(),$this->getTokenCallBack()); 
+            $parcelWS =new ParcelShopLocationWSServices($this->getAuthDto(),$this->getTokenCallBack());
 
             $parcel = json_decode($parcelWS->getParcelShopData($parcel_shop_id,$country_code));
-            
+
             return ($parcel && $parcel->address)?$parcel->address->zipCode:-1;
 
         }catch(Exception $e){
@@ -310,12 +310,12 @@ class DhlClient{
 
     public function getParcelShop($parcel_shop_id, $country_code){
         try{
-            $parcelWS =new ParcelShopLocationWSServices($this->getAuthDto(),$this->getTokenCallBack()); 
+            $parcelWS =new ParcelShopLocationWSServices($this->getAuthDto(),$this->getTokenCallBack());
 
             $parcel = json_decode($parcelWS->getParcelShopData($parcel_shop_id,$country_code));
 
             return $parcel;
-        
+
         }catch(Exception $e){
             throw($e);
         }
@@ -323,12 +323,12 @@ class DhlClient{
     }
 
     public function getServicePointsLocation($params){
-        try {        
+        try {
             $dto = $this->createParcelShopLocQueryDTO($params);
 
             $ws = new ParcelShopLocationWSServices($this->getAuthDto(),$this->getTokenCallBack());
             $servicepoints=$ws->getParcelLocations($dto);
-            
+
             $servicepoints =  json_decode($servicepoints);
             $i=0;
             foreach($servicepoints as $servicepoint){
@@ -356,7 +356,7 @@ class DhlClient{
     public function getServicePointId($order){
         foreach( $order->get_items( 'shipping' ) as $item_id => $shipping_item_obj ){
             if ($shipping_item_obj->get_method_id() == "dhl_service_point_shipping_method") {
-                return get_data_from_meta_data($shipping_item_obj->get_meta_data(),'service_point_id');
+                return dhl_parcel_get_data_from_meta_data($shipping_item_obj->get_meta_data(),'service_point_id');
             }
         }
         return null;
@@ -373,7 +373,7 @@ class DhlClient{
         $pick_up_date = new DateTime($pickUpDate);
 
         $dbh = new Database_Handler();
-        $pickReq = $dbh->get_pickup_request($pick_up_date, $cron);       
+        $pickReq = $dbh->get_pickup_request($pick_up_date, $cron);
 
         return (count($pickReq) && $cron) || (!count($pickReq) && !$cron);
     }
@@ -432,7 +432,7 @@ class DhlClient{
             return array();
         }
         $parcel_dimensions = $parcelType->setDimensionsHelper($formated_product_dimensions['length'],$formated_product_dimensions['width'],$formated_product_dimensions['height']);
-        return $parcel_dimensions;        
+        return $parcel_dimensions;
     }
 
     //Get the capability based on the cart
@@ -464,7 +464,7 @@ class DhlClient{
         $dto->toPostalCode = $customer->get_shipping_postcode();
 
         $dto->accountNubmer = $options['wsc_account_id'];
-        
+
         return $dto;
     }
 
@@ -515,5 +515,3 @@ class DhlClient{
         return $country_list;
     }
 }
-
-?>

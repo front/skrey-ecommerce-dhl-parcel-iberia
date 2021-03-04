@@ -14,7 +14,7 @@ class Database_Handler {
      */
     public function create_shipping_rules_table() {
         global $wpdb;
-        
+
         //Name of the database
         $table_name = $wpdb->prefix . self::SHIPPING_RULES_TABLE_NAME;
 
@@ -33,7 +33,7 @@ class Database_Handler {
             shippingZoneId bigint(12) NOT NULL,
             PRIMARY KEY  (id)
           ) $charset_collate;";
-          
+
           require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
           dbDelta( $sql );
     }
@@ -48,19 +48,19 @@ class Database_Handler {
                     CHANGE COLUMN `max` `max` DOUBLE NOT NULL ;";
             require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
             $wpdb->query($sql);
-            $final_version = '1.0.14';          
+            $final_version = '1.0.14';
         }
         $options = get_option( 'dhl_parcel_options' );
         $options['dhl_parcel_db_version'] = $final_version;
         update_option('dhl_parcel_options', $options);
     }
-    
+
     /**
      * Creates database table
      */
     public function create_labels_table() {
         global $wpdb;
-        
+
         //Name of the database
         $table_name = $wpdb->prefix . self::LABELS_TABLE_NAME;
 
@@ -75,7 +75,7 @@ class Database_Handler {
             tracking_code varchar(45) DEFAULT '' NOT NULL,
             PRIMARY KEY  (id)
           ) $charset_collate;";
-          
+
           require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
           dbDelta( $sql );
     }
@@ -85,7 +85,7 @@ class Database_Handler {
      */
     public function create_pickup_request_table() {
         global $wpdb;
-        
+
         //Name of the database
         $table_name = $wpdb->prefix . self::LABELS_PICKUP_REQUEST_NAME;
 
@@ -99,18 +99,18 @@ class Database_Handler {
             success boolean NOT NULL,
             PRIMARY KEY  (id)
           ) $charset_collate;";
-          
+
           require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
           dbDelta( $sql );
     }
-    
+
     /**
      * Inserts/Update a shipping label into the database
      */
     public function insert_labels( $label_id, $is_return_label, $order_id, $tracking_code) {
 
         global $wpdb;
-        
+
         //Name of the database
         $table_name = $wpdb->prefix . self::LABELS_TABLE_NAME;
 
@@ -127,7 +127,7 @@ class Database_Handler {
     }
 
     /**
-     * Retrives labels based on order_id 
+     * Retrives labels based on order_id
      */
     public function get_labels_by_order_id($order_id, $is_return_label){
 
@@ -138,14 +138,14 @@ class Database_Handler {
         $query = "SELECT * FROM $table_name WHERE order_id = %s AND is_return_label = %d";
         $results = $wpdb->get_results( $wpdb->prepare( $query, array($order_id, (int)$is_return_label) ) );
 
-       
+
         return  $results[0];
     }
 
     public function get_labels_by_date($date){
 
         global $wpdb;
-            
+
         //Name of the database
         $table_name = $wpdb->prefix . self::LABELS_TABLE_NAME;
         $query = "SELECT * FROM $table_name WHERE creation_date = %s";
@@ -166,7 +166,7 @@ class Database_Handler {
     public function insert_pickup_request( $order_id, $pick_up_request_date, $success) {
 
         global $wpdb;
-        
+
         //Name of the database
         $table_name = $wpdb->prefix . self::LABELS_PICKUP_REQUEST_NAME;
 
@@ -185,7 +185,7 @@ class Database_Handler {
     public function update_pickup_request( $pick_up_request_date, $success) {
 
         global $wpdb;
-        
+
         //Name of the database
         $table_name = $wpdb->prefix . self::LABELS_PICKUP_REQUEST_NAME;
 
@@ -194,7 +194,7 @@ class Database_Handler {
             array(
                 'success' => (int)$success
             ),
-            array( 'pick_up_date = '.$pick_up_request_date ) 
+            array( 'pick_up_date = '.$pick_up_request_date )
         );
 
         return $return;
@@ -203,12 +203,12 @@ class Database_Handler {
 
     public function get_pickup_request($pick_up_date, $cron){
         global $wpdb;
-            
+
         //Name of the database
         $table_name = $wpdb->prefix . self::LABELS_PICKUP_REQUEST_NAME;
-        
+
         $query = $wpdb->prepare("SELECT * FROM $table_name WHERE pick_up_date = %s AND success = %d", $pick_up_date->format('Y-m-d'), (int) !$cron );
-        
+
         $results = $wpdb->get_results( $query );
 
         return $results;
@@ -254,8 +254,8 @@ class Database_Handler {
                     $table_name,
                     array(
                         'countryId' => $shipping_price_rule['countryId'],
-                        'minPostCode' => postcode_normalizer($shipping_price_rule['countryId'],$shipping_price_rule['minPostCode'] ),
-                        'maxPostCode' => postcode_normalizer($shipping_price_rule['countryId'],$shipping_price_rule['maxPostCode'] ),
+                        'minPostCode' => dhl_parcel_postcode_normalizer($shipping_price_rule['countryId'],$shipping_price_rule['minPostCode'] ),
+                        'maxPostCode' => dhl_parcel_postcode_normalizer($shipping_price_rule['countryId'],$shipping_price_rule['maxPostCode'] ),
                         'min' => doubleval($shipping_price_rule['min']),
                         'max' => doubleval($shipping_price_rule['max']),
                         'ruleCriteria' => $shipping_price_rule['ruleCriteria'],
@@ -271,8 +271,8 @@ class Database_Handler {
                     array(
                         'id' => $shipping_price_rule['id'],
                         'countryId' => $shipping_price_rule['countryId'],
-                        'minPostCode' => postcode_normalizer($shipping_price_rule['countryId'],$shipping_price_rule['minPostCode'] ),
-                        'maxPostCode' => postcode_normalizer($shipping_price_rule['countryId'],$shipping_price_rule['maxPostCode'] ),
+                        'minPostCode' => dhl_parcel_postcode_normalizer($shipping_price_rule['countryId'],$shipping_price_rule['minPostCode'] ),
+                        'maxPostCode' => dhl_parcel_postcode_normalizer($shipping_price_rule['countryId'],$shipping_price_rule['maxPostCode'] ),
                         'min' => doubleval($shipping_price_rule['min']),
                         'max' => doubleval($shipping_price_rule['max']),
                         'ruleCriteria' => $shipping_price_rule['ruleCriteria'],
@@ -292,9 +292,9 @@ class Database_Handler {
      * @return rules rules of location
      */
     public function get_shipping_rules_by_location($locations, $shipping_method) {
- 
+
         global $wpdb;
-            
+
         //Name of the database
         $table_name = $wpdb->prefix . self::SHIPPING_RULES_TABLE_NAME;
 
@@ -314,8 +314,8 @@ class Database_Handler {
         foreach ($countries as $countryId){
 
             //There arent postcodes defined
-            if(empty($postcodes)){      
-            
+            if(empty($postcodes)){
+
                 $query = "SELECT * FROM $table_name WHERE countryId=%s AND minPostCode IS NULL AND maxPostCode IS NULL AND shippingMethod=%s";
                 $results = $wpdb->get_results( $wpdb->prepare( $query, array($countryId, $shipping_method) ) );
                 array_push($rules,$results);
@@ -325,21 +325,21 @@ class Database_Handler {
                     //Uniform input
                     //Single postcode
                     if(strpos($postcodeValue, '...') == false){
-                        $minPostCode = postcode_normalizer($countryId, $postcodeValue);
-                        $maxPostCode = postcode_normalizer($countryId, $postcodeValue);
-    
+                        $minPostCode = dhl_parcel_postcode_normalizer($countryId, $postcodeValue);
+                        $maxPostCode = dhl_parcel_postcode_normalizer($countryId, $postcodeValue);
+
                     } else {
                         $postcode = explode("...", $postcodeValue);
-                        $minPostCode = postcode_normalizer($countryId, $postcode[0]);
-                        $maxPostCode = postcode_normalizer($countryId, $postcode[1]);
+                        $minPostCode = dhl_parcel_postcode_normalizer($countryId, $postcode[0]);
+                        $maxPostCode = dhl_parcel_postcode_normalizer($countryId, $postcode[1]);
                     }
-                   
+
                     $query = "SELECT * FROM $table_name WHERE countryId=%s AND minPostCode=%s AND maxPostCode=%s AND shippingMethod=%s";
                     $results = $wpdb->get_results( $wpdb->prepare( $query, array($countryId, $minPostCode, $maxPostCode, $shipping_method) ) );
                     array_push($rules,$results);
                 }
             }
-            
+
         }
 
         /** Flatten the array and changes from stdClass to array*/
@@ -354,9 +354,9 @@ class Database_Handler {
     }
     public function get_shipping_rules_by_zone_id($zone_id, $shipping_method) {
         global $wpdb;
-            
+
         //Name of the database
-        $table_name = $wpdb->prefix . self::SHIPPING_RULES_TABLE_NAME;      
+        $table_name = $wpdb->prefix . self::SHIPPING_RULES_TABLE_NAME;
 
         $rules = array();
         $query = "SELECT * FROM $table_name WHERE shippingZoneId=%s AND shippingMethod=%s";
@@ -374,17 +374,17 @@ class Database_Handler {
     }
     public function get_shipping_rules_by_zone_id_and_criteria($zone_id, $weight, $price, $shipping_method) {
         global $wpdb;
-            
+
         //Name of the database
-        $table_name = $wpdb->prefix . self::SHIPPING_RULES_TABLE_NAME;      
+        $table_name = $wpdb->prefix . self::SHIPPING_RULES_TABLE_NAME;
 
         $rules = array();
-        $query = "SELECT * FROM $table_name 
-                  WHERE shippingZoneId=%s 
+        $query = "SELECT * FROM $table_name
+                  WHERE shippingZoneId=%s
                   AND shippingMethod=%s
-                  AND 
-                      (( %s BETWEEN min AND max AND ruleCriteria = 'Price') 
-                      OR  
+                  AND
+                      (( %s BETWEEN min AND max AND ruleCriteria = 'Price')
+                      OR
                       (  %s BETWEEN min AND max AND ruleCriteria = 'Weight'))";
         $results = $wpdb->get_results($wpdb->prepare( $query, array($zone_id,$shipping_method,$price,$weight)));
         array_push($rules,$results);
@@ -401,13 +401,13 @@ class Database_Handler {
 
     /**
      * Retrives the shipping rules for the given country, postcode, weight, price, shipping method
-     * @param 
+     * @param
      * @return rules rules
      */
     public function get_shipping_rules_by_criteria($countryId, $postcode, $weight, $price, $shipping_method) {
 
         $rules = array();
-        
+
         //Weight based rules
         $results = $this->get_shipping_rules($countryId, $postcode, "Weight", $weight, $shipping_method);
         array_push($rules,$results);
@@ -416,7 +416,7 @@ class Database_Handler {
         $results = $this->get_shipping_rules($countryId, $postcode, "Price", $price, $shipping_method);
         array_push($rules,$results);
 
-        $rules = array_flatten($rules);
+        $rules = dhl_parcel_array_flatten($rules);
 
         return $rules;
     }
@@ -427,34 +427,34 @@ class Database_Handler {
     private function get_shipping_rules($countryId, $postcode, $ruleCriteria, $value, $shipping_method){
 
         global $wpdb;
-            
+
         //Name of the database
         $table_name = $wpdb->prefix . self::SHIPPING_RULES_TABLE_NAME;
-        $normalized_postcode = postcode_normalizer($countryId, $postcode);
+        $normalized_postcode = dhl_parcel_postcode_normalizer($countryId, $postcode);
 
-        $query = 
-            "SELECT cost FROM $table_name 
-            WHERE countryId = %s 
+        $query =
+            "SELECT cost FROM $table_name
+            WHERE countryId = %s
             AND minPostCode <= %s
             AND maxPostCode >= %s
             AND min <= %s
             AND max >= %s
             AND shippingMethod = %s
             AND ruleCriteria = %s";
-        
+
         $results = $wpdb->get_results( $wpdb->prepare( $query, array($countryId, $normalized_postcode, $normalized_postcode, $value, $value, $shipping_method, $ruleCriteria) ) );
 
         if(empty($results)){
-            $query = 
+            $query =
                 "SELECT cost FROM $table_name
-                WHERE countryId = %s 
+                WHERE countryId = %s
                 AND minPostCode IS NULL
-                AND maxPostCode IS NULL 
-                AND min <= %s 
-                AND max >= %s 
-                AND shippingMethod = %s 
+                AND maxPostCode IS NULL
+                AND min <= %s
+                AND max >= %s
+                AND shippingMethod = %s
                 AND ruleCriteria = %s";
-            
+
             $results = $wpdb->get_results( $wpdb->prepare( $query, array($countryId, $value, $value, $shipping_method, $ruleCriteria) ) );
         }
 
@@ -466,7 +466,7 @@ class Database_Handler {
      * Validates if object can be inserted into the database
      */
     public function validate_object_for_database($shipping_price_rule){
-        if( is_null($shipping_price_rule['countryID']) 
+        if( is_null($shipping_price_rule['countryID'])
         && $shipping_price_rule['min'] >=0
         && $shipping_price_rule['max'] >= $shipping_price_rule['min']
         && $shipping_price_rule['cost'] >=0
@@ -508,7 +508,7 @@ class Database_Handler {
      */
     public function delete_shipping_rules_table() {
         global $wpdb;
-        
+
         //Name of the database
         $table_name = $wpdb->prefix . self::SHIPPING_RULES_TABLE_NAME;
 
@@ -523,7 +523,7 @@ class Database_Handler {
     public function get_all_shipping_prices() {
 
         global $wpdb;
-        
+
         //Name of the database
         $table_name = $wpdb->prefix . self::SHIPPING_RULES_TABLE_NAME;
 
@@ -539,7 +539,7 @@ class Database_Handler {
     public function delete_shipping_rule($ID) {
 
         global $wpdb;
-        
+
         //Name of the database
         $table_name = $wpdb->prefix . self::SHIPPING_RULES_TABLE_NAME;
 
@@ -555,7 +555,7 @@ class Database_Handler {
     public function delete_shipping_rule_by_location($locations, $shipping_method, $shippingZoneId) {
 
         global $wpdb;
-        
+
         //Name of the database
         $table_name = $wpdb->prefix . self::SHIPPING_RULES_TABLE_NAME;
 
@@ -573,8 +573,8 @@ class Database_Handler {
         foreach ($countries as $countryId){
 
             //There arent postcodes defined
-            if(empty($postcodes)){      
-            
+            if(empty($postcodes)){
+
                 $query = array( 'countryId' => $countryId, 'minPostCode' => null, 'maxPostCode' => null, 'shippingMethod' => $shipping_method, 'shippingZoneId' => $shippingZoneId );
                 $wpdb->delete($table_name,$query);
             } else {
@@ -583,15 +583,15 @@ class Database_Handler {
                     //Uniform input
                     //Single postcode
                     if(strpos($postcodeValue, '...') == false){
-                        $minPostCode = postcode_normalizer($countryId, $postcodeValue);
-                        $maxPostCode = postcode_normalizer($countryId, $postcodeValue);
-    
+                        $minPostCode = dhl_parcel_postcode_normalizer($countryId, $postcodeValue);
+                        $maxPostCode = dhl_parcel_postcode_normalizer($countryId, $postcodeValue);
+
                     } else {
                         $postcode = explode("...", $postcodeValue);
-                        $minPostCode = postcode_normalizer($countryId, $postcode[0]);
-                        $maxPostCode = postcode_normalizer($countryId, $postcode[1]);
+                        $minPostCode = dhl_parcel_postcode_normalizer($countryId, $postcode[0]);
+                        $maxPostCode = dhl_parcel_postcode_normalizer($countryId, $postcode[1]);
                     }
-                   
+
                     $query = array( 'countryId' => $countryId, 'minPostCode' => $minPostCode, 'maxPostCode' => $maxPostCode, 'shippingMethod' => $shipping_method,  'shippingZoneId' => $shippingZoneId  );
                     $wpdb->delete($table_name,$query);
                 }
@@ -601,7 +601,7 @@ class Database_Handler {
 
     public function deleteShippingRulesByZoneId($zoneId){
         global $wpdb;
-        
+
         //Name of the database
         $table_name = $wpdb->prefix . self::SHIPPING_RULES_TABLE_NAME;
 
@@ -610,7 +610,7 @@ class Database_Handler {
 
     public function get_next_id(){
         global $wpdb;
-        
+
         //Name of the database
         $table_name = $wpdb->prefix . self::SHIPPING_RULES_TABLE_NAME;
 
@@ -619,9 +619,7 @@ class Database_Handler {
         $t = $results['0'];
         $array = json_decode(json_encode($t), True);
 
-        return $array['MAX(id)'];    
+        return $array['MAX(id)'];
     }
 
 }
-
-?>

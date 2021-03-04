@@ -11,16 +11,16 @@
                     <strong><?php echo esc_html(__("Tracking number", "dhl_parcel"))?>: </strong> <?php echo $tracking_data['barcode'] ?>
                 </td>
                 <td>
-                    <strong><?php echo esc_html(__("Origin", "dhl_parcel"))?>: </strong> 
+                    <strong><?php echo esc_html(__("Origin", "dhl_parcel"))?>: </strong>
                     <?php $address = $tracking_data['shipper']['address'];
                         $origin = " " .$address['street']." ". $address['houseNumber'] . ' ' . $address['postalCode'] . ' ' . $address['city'];
                         echo esc_html($origin) ?>
-                </td>                   
+                </td>
             </tr>
             <tr>
                 <td>
-                    <strong><?php echo esc_html(__("Date", "dhl_parcel"))?>: : </strong> <?php $date=new DateTime($tracking_data['date']); 
-                    
+                    <strong><?php echo esc_html(__("Date", "dhl_parcel"))?>: : </strong> <?php $date=new DateTime($tracking_data['date']);
+
                     echo esc_html($date->format('H:i:s d-m-Y')); ?>
                 </td>
                 <td>
@@ -58,11 +58,11 @@
                 <?php foreach ( $tracking_data['events'] as $event ) : $count_rows++; ?>
                     <tr id ="tr_<?php echo($count_rules) ?>">
                         <td>
-                            <?php $date=new DateTime($event['timestamp']); 
+                            <?php $date=new DateTime($event['timestamp']);
                             echo $date->format('H:i:s d-m-Y'); ?>
                         </td>
                         <td>
-                            <?php echo formatStringToReadableString($event['status']); ?>
+                            <?php echo dhl_parcel_formatStringToReadableString($event['status']); ?>
                         </td>
                         <td>
                             <?php echo esc_html($event['facility']); ?>
@@ -86,7 +86,7 @@ var btn = document.getElementById("trackAndTraceLink");
 // Get the <span> element that closes the modal
 var span = document.getElementsByClassName("close")[0];
 
-// When the user clicks the button, open the modal 
+// When the user clicks the button, open the modal
 btn.onclick = function() {
     modal.style.display = "block";
 }

@@ -1,8 +1,6 @@
 <?php
 if ( ! defined( 'WPINC' ) ) {
- 
     die;
- 
 }
 
 /**
@@ -11,7 +9,7 @@ if ( ! defined( 'WPINC' ) ) {
  * @param postcode unormalized_postcode
  * @return normalized_postcode returns the normalized_postcode
  */
-function postcode_normalizer($countryId, $postcode) {
+function dhl_parcel_postcode_normalizer($countryId, $postcode) {
 
     if(is_null($postcode)){
         return null;
@@ -25,23 +23,23 @@ function postcode_normalizer($countryId, $postcode) {
     }
 }
 
-function array_flatten($array) { 
-    if (!is_array($array)) { 
-      return false; 
-    } 
-    $result = array(); 
-    foreach ($array as $key => $value) { 
-      if (is_array($value)) { 
-        $result = array_merge($result, array_flatten($value)); 
-      } else { 
-        $result[$key] = $value; 
-      } 
-    } 
-    return $result; 
-  }
+function dhl_parcel_array_flatten($array) {
+    if (!is_array($array)) {
+      return false;
+    }
+    $result = array();
+    foreach ($array as $key => $value) {
+      if (is_array($value)) {
+        $result = array_merge($result, dhl_parcel_array_flatten($value));
+      } else {
+        $result[$key] = $value;
+      }
+    }
+    return $result;
+}
 
-function get_data_from_meta_data($metadata, $key){
-    
+function dhl_parcel_get_data_from_meta_data($metadata, $key) {
+
     foreach( $metadata as $meta ){
         $data = $meta->get_data();
         if($data['key']==$key){
@@ -54,20 +52,19 @@ function get_data_from_meta_data($metadata, $key){
 }
 
 // Cast all stdClasses in an array to arrays
-function arrayCastRecursive($array)
-{
+function dhl_parcel_arrayCastRecursive($array) {
     if (is_array($array)) {
         foreach ($array as $key => $value) {
             if (is_array($value)) {
-                $array[$key] = arrayCastRecursive($value);
+                $array[$key] = dhl_parcel_arrayCastRecursive($value);
             }
             if ($value instanceof stdClass) {
-                $array[$key] = arrayCastRecursive((array)$value);
+                $array[$key] = dhl_parcel_arrayCastRecursive((array)$value);
             }
         }
     }
     if ($array instanceof stdClass) {
-        return arrayCastRecursive((array)$array);
+        return dhl_parcel_arrayCastRecursive((array)$array);
     }
     return $array;
 }
@@ -75,12 +72,10 @@ function arrayCastRecursive($array)
 /*
  * Removes snake case/CAPS LOCK and outputs a proper readable string
 */
-function formatStringToReadableString($stringToTransform){
-   
+function dhl_parcel_formatStringToReadableString($stringToTransform) {
+
     $newString = strtolower($stringToTransform);
     $newString = str_replace('_', ' ', ucwords($newString, ' '));
 
     return $newString;
 }
-
-?>

@@ -7,7 +7,7 @@ Version: 1.0.19
 Author: Skrey Software
 Author URI: www.skrey-software.com
 */
-define ( 'DHL_PARCEL_VERSION', '1.0.19' ); 
+define ( 'DHL_PARCEL_VERSION', '1.0.19' );
 
 //Dependencies
 require_once('classes/dhl-service-point-shipping-method.php');
@@ -84,7 +84,7 @@ function load_google_maps() {
 
     <script sync
             src="https://maps.googleapis.com/maps/api/js?key=<?php $options = get_option( 'dhl_parcel_options' );echo esc_html($options['gmac_google_map_api_key']) ?>">
-        </script>  
+        </script>
 
     <?php
 }
@@ -101,7 +101,7 @@ function front_dhl_enqueue_scripts() {
     wp_register_style( 'track-and-trace', plugin_dir_url( __FILE__ ) . 'assets/css/track-and-trace-modal.css', false, '1.0.0' );
     wp_enqueue_style( 'track-and-trace' );
     wp_enqueue_style('checkout_style', plugin_dir_url( __FILE__ ).'assets/css/checkout.css');
-    
+
 }
 
 add_action( 'wp_enqueue_scripts', 'front_dhl_enqueue_scripts' );
@@ -119,7 +119,7 @@ require_once( 'async/ajax_controller.php');
 
 //Hook for updating the shipping rate based on the service point
 add_action( 'woocommerce_checkout_update_order_review', 'woocommerce_checkout_update_order_review' );
-   
+
 function woocommerce_checkout_update_order_review( $post_data ){
 
     $shipping_address = WC()->session->get( 'service_point_address');
@@ -131,7 +131,7 @@ function woocommerce_checkout_update_order_review( $post_data ){
             $package['destination']['postcode']  = $shipping_address['codePostal'];
             $package['destination']['city'] = $shipping_address['city'];
             $package['destination']['address'] = $shipping_address['address'];
-            
+
             $shipping_obj = WC()->shipping;
             $shipping_methods = $shipping_obj->load_shipping_methods($package);
             foreach ( $shipping_methods as $shipping_method ) {
@@ -146,15 +146,15 @@ function woocommerce_checkout_update_order_review( $post_data ){
             // this is needed for us to remove the session set for the shipping cost. Without this, we can't set it on the checkout page.
             WC()->session->set( 'shipping_for_package_' . $package_key, false );
         }
-        
+
     }
-        
+
 }
 
 //Update the shipping rates
 add_filter( 'woocommerce_package_rates', 'adjust_shipping_rate', 50 );
 function adjust_shipping_rate( $rates ){
-    
+
     foreach ($rates as $rate) {
         $cost = $rate->cost;
         if($rate->method_id == "dhl_service_point_shipping_method"){
@@ -184,16 +184,16 @@ function dhl_shipping_methods_verifier( $available_shipping_methods, $package ) 
             }
         }
     }
-    
+
     return $available_shipping_methods;
 }
 
 function get_shipping_cost_by_service_point($service_point_address){
     global $woocommerce;
 
-    $postal_code = $service_point_address[ 'codePostal' ];	
+    $postal_code = $service_point_address[ 'codePostal' ];
     $countryId = $service_point_address[ 'country' ];
-    $postal_code = postcode_normalizer($countryId,$postal_code);
+    $postal_code = dhl_parcel_postcode_normalizer($countryId,$postal_code);
 
     $weight = $woocommerce->cart->cart_contents_weight;
     $price = floatval( preg_replace( '#[^\d.]#', '', $woocommerce->cart->get_cart_total() ) );
@@ -211,7 +211,7 @@ function get_shipping_cost_by_service_point($service_point_address){
             }
         }
     }
-    
+
     return $finalCost;
 }
 
@@ -253,19 +253,19 @@ function after_checkout_order_validation( $posted ) {
         if ($posted['shipping_method']['0'] == "dhl_service_point_shipping_method"  && empty($service_point['sp_id'])) {
             wc_add_notice( __( "No service point selected for shipping!", 'dhl_parcel_iberia_woocommerce_plugin' ), 'error' );
        }
-       if(strlen($posted['billing_address_1']) >= 40 
-            ||  strlen($posted['billing_address_2']) >= 40 
-            || strlen($posted['shipping_address_1']) >= 40 
+       if(strlen($posted['billing_address_1']) >= 40
+            ||  strlen($posted['billing_address_2']) >= 40
+            || strlen($posted['shipping_address_1']) >= 40
             ||  strlen($posted['shipping_address_2']) >= 40) {
                 wc_add_notice( __( "Address can't have more that 40 characters!", 'dhl_parcel_iberia_woocommerce_plugin' ), 'error' );
-        } 
+        }
     }
-    
+
 
 }
 
 //Check when to create the label
-function action_woocommerce_order_status_changed( $this_get_id, $this_status_transition_from, $this_status_transition_to, $instance ) { 
+function action_woocommerce_order_status_changed( $this_get_id, $this_status_transition_from, $this_status_transition_to, $instance ) {
     $options = get_option( 'dhl_parcel_options' );
 
     $dbh = new Database_Handler();
@@ -273,7 +273,7 @@ function action_woocommerce_order_status_changed( $this_get_id, $this_status_tra
     $dhl_client = new DhlClient();
     if (!$dhl_client->isDHLParcelShipment($this_get_id)) { return; }
     $label = $dbh->get_labels_by_order_id($this_get_id,false);
-    
+
     if( strcmp($status, $this_status_transition_to)==0 && !count($label)){
         //Reference incase its order_id and did not enter on the "Edit order" page.
         if ($options['ppoc_reference_field'] == "order_id"){
@@ -295,11 +295,11 @@ function action_woocommerce_order_status_changed( $this_get_id, $this_status_tra
         }
         $dhl_client->createPickUpRequest($this_get_id);
     }
-    
-}; 
-         
+
+};
+
 //Hook for when the order state changes
-add_action( 'woocommerce_order_status_changed', 'action_woocommerce_order_status_changed', 10, 4 ); 
+add_action( 'woocommerce_order_status_changed', 'action_woocommerce_order_status_changed', 10, 4 );
 
 
 //Add a custom actions to order actions select box on edit order page
@@ -319,7 +319,7 @@ add_action( 'woocommerce_order_actions', 'order_action_print_label' );
 
 //Add an print label when custom action is clicked
 function order_action_print_label_action( $order ) {
-    
+
     $dbh = new Database_Handler();
 
     $label = $dbh->get_labels_by_order_id($order->get_id(),false);
@@ -327,13 +327,13 @@ function order_action_print_label_action( $order ) {
     $label = get_object_vars($label);
     $label_id = $label['label_id'];
     get_label( $order->get_id(), $label_id, false );
-    
+
 }
 add_action( 'woocommerce_order_action_print_label', 'order_action_print_label_action' );
 
 //Add an print return label when custom action is clicked
 function order_action_print_return_label_action( $order ) {
-    
+
     $dbh = new Database_Handler();
     $label = $dbh->get_labels_by_order_id($order->get_id(),true);
     if($label == null || empty($label)){
@@ -352,14 +352,14 @@ add_action( 'woocommerce_order_action_print_return_label', 'order_action_print_r
 
 //Show the label
 function get_label( $order_id, $label_id, $is_return ){
-    
+
     if(!$label_id || $label_id==null){
         die();
     }else{
         $dhl_client = new DhlClient();
         try{
             $pdf = $dhl_client->getLabelPDF($label_id);
-        }catch(Exception $e){ 
+        }catch(Exception $e){
         die();
         }
         $tmpName = tempnam(sys_get_temp_dir(), $order_id.'.pdf');
@@ -408,8 +408,8 @@ function dhl_shipping_tracking_field($order){
         $tracking_data = getTrackingData($order);
 
         if( $tracking_data != null){
-            
-            $tracking_data = arrayCastRecursive( json_decode($tracking_data) );
+
+            $tracking_data = dhl_parcel_arrayCastRecursive( json_decode($tracking_data) );
             $tracking_data = $tracking_data[0];
             if($tracking_data['events'] != null){
                 $last_status = end($tracking_data['events'])['status'];
@@ -419,7 +419,7 @@ function dhl_shipping_tracking_field($order){
         } else {
             $last_status = "";
         }
-        
+
 
         $lang = $order->get_shipping_country();
         $year = (new DateTime($label['creation_date']))->format('Y');
@@ -427,11 +427,11 @@ function dhl_shipping_tracking_field($order){
         $url = str_replace('@', $tracking_code, $url);
         $url = str_replace('$year', $year, $url);
         $url = str_replace('$lang', $lang, $url);
-        
+
         echo '<p><strong>'.__('Tracking code').':</strong> <br/> <a id="trackAndTraceLink" href="'.esc_html($url).'">'.esc_html($tracking_code).'</a></p>
         <p><label>'.__("Last shipping status: ") . $last_status.'</label></p>';
     }
-    
+
 }
 
 //add custom data to the view order field
@@ -449,8 +449,8 @@ function dhl_shipping_tracking_field_view_order($order_id){
         $tracking_code = $label['tracking_code'];
         $order = wc_get_order($order_id);
         $tracking_data = getTrackingData($order);
-        
-        $tracking_data = arrayCastRecursive( json_decode($tracking_data) );
+
+        $tracking_data = dhl_parcel_arrayCastRecursive( json_decode($tracking_data) );
         $tracking_data = $tracking_data[0];
 
         $last_status = end($tracking_data['events'])['status'];
@@ -461,11 +461,11 @@ function dhl_shipping_tracking_field_view_order($order_id){
         $url = str_replace('@', $tracking_code, $url);
         $url = str_replace('$year', $year, $url);
         $url = str_replace('$lang', $lang, $url);
-        
+
         echo '<p><strong>'.__('Tracking code').':</strong> <br/> <a id="trackAndTraceLink" href="'.esc_html($url).'">'.esc_html($tracking_code).'</a></p>
         <p><label>'.__("Last shipping status: ") . $last_status.'</label></p>';
     }
-    
+
 }
 
 
@@ -478,7 +478,7 @@ function getTrackingData($order){
         $label =  get_object_vars($label);
         $tracking_code = $label['tracking_code'];
         $postcode = $order->get_shipping_postcode();
-        
+
         $tracker = new DhLClient();
         return $tracker->getTrackingInfo($tracking_code, $postcode);
     }
@@ -504,19 +504,19 @@ function dhl_pickup_request_hourly() {
 }
 
 //On shipping zone saves
-add_action( "woocommerce_before_shipping_zone_object_save", 'action_woocommerce_before_shipping_zone_object_save', 10, 2 ); 
+add_action( "woocommerce_before_shipping_zone_object_save", 'action_woocommerce_before_shipping_zone_object_save', 10, 2 );
 
-function action_woocommerce_before_shipping_zone_object_save( $instance, $this_data_store ) { 
-    // make action magic happen here... 
+function action_woocommerce_before_shipping_zone_object_save( $instance, $this_data_store ) {
+    // make action magic happen here...
     $shipping_methods = $instance->get_shipping_methods();
     foreach($shipping_methods as $shipping_method){
         if( isset($instance->get_changes()['zone_locations']) ){
             update_shipping_rules($shipping_method, $instance->get_changes()['zone_locations'], $instance->get_id());
         }
-        
+
     }
-    
-}; 
+
+};
 
 function update_shipping_rules( $shipping_method, $new_location, $zone_id){
     $shipping_methods_accepted_ids = array("dhl_service_point_shipping_method", "dhl_normal_shipping_method" );
@@ -534,25 +534,23 @@ function update_shipping_rules( $shipping_method, $new_location, $zone_id){
     }
 }
 
-// define the woocommerce_shipping_zone_method_deleted callback 
-function remove_shipping_method_rules_on_shipping_method_delete( $instance_id, $method_id, $zone_id ) { 
+// define the woocommerce_shipping_zone_method_deleted callback
+function remove_shipping_method_rules_on_shipping_method_delete( $instance_id, $method_id, $zone_id ) {
 
     $dbh = new Database_Handler();
     $zone = WC_Shipping_Zones::get_zone_by( 'zone_id', $zone_id );
     $dbh->delete_shipping_rule_by_location($zone->get_zone_locations(), $method_id, $zone_id);
 
-}; 
-         
-// add the action 
+};
+
+// add the action
 add_action( 'woocommerce_shipping_zone_method_deleted', 'remove_shipping_method_rules_on_shipping_method_delete', 10, 3 );
 
-// define the woocommerce_delete_shipping_zone callback 
-function remove_shipping_methods_on_shipping_zone_delete( $id ) { 
+// define the woocommerce_delete_shipping_zone callback
+function remove_shipping_methods_on_shipping_zone_delete( $id ) {
     $dbh = new Database_Handler();
     $dbh->deleteShippingRulesByZoneId($id);
-}; 
-         
-// add the action 
-add_action( 'woocommerce_delete_shipping_zone', 'remove_shipping_methods_on_shipping_zone_delete', 10, 1 ); 
+};
 
-?>
+// add the action
+add_action( 'woocommerce_delete_shipping_zone', 'remove_shipping_methods_on_shipping_zone_delete', 10, 1 );
