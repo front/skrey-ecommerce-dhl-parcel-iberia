@@ -1,0 +1,102 @@
+.dhl_parcel_shipping_method_instructions {
+	font-size: 0.8em;
+}
+#dhl_parcel {
+	margin-bottom: 2em;
+	padding: 0.5em;
+}
+#dhl_parcel > p > label {
+	display: block !important;
+}
+.dhl_parcel-points-fragment {
+	margin-top: 1em;
+	display: block !important;
+}
+.dhl_parcel-points-fragment .select2-container {
+	display: block !important;
+	width: 100% !important;
+}
+.dhl_parcel-points-fragment-point-details {
+	display: block;
+	margin-top: 1em;
+}
+.dhl_parcel-points-fragment-point-details small {
+	font-size: 80%;
+}
+.dhl_parcel-points-fragment-point-details.updating {
+	opacity: 0.25;
+}
+#dhl_parcel-points-fragment-point-details-address {
+	display: block;
+}
+#dhl_parcel-points-fragment-point-details-map {
+	display: block;
+	float: right;
+	margin-left: 1em;
+}
+.dhl_parcel-clear {
+	display: block;
+	clear: both;
+}
+
+#dhl_parcel_map {
+	height: 400px;
+	width: 100%;
+	
+}
+
+.pointParcel
+{
+    min-width:350px;
+    max-height:300px;
+}
+.parcel_loc_txt{
+    margin-bottom:15px;
+}
+.over_map 
+{ 
+    position: absolute; 
+    background-color: rgba(204, 204, 204, 80%);
+    height: 100%;
+    width: 100%;
+    top: 0px; 
+    left: 0px; 
+    z-index: 99; 
+}
+.map_wrapper
+{
+    position: relative;
+
+    text-align: center;
+}
+.no_results
+{
+    position: relative;
+    float: left;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+.btn-search-dhl
+{
+    margin: 10px;
+}
+.search-div-dhl
+{
+    align-items: center;
+    display: flex;
+}
+
+.service_points_radio{
+	vertical-align: middle;
+	width: 13px;
+    margin: 0;
+
+}
+
+.service_points_label {
+    padding-left: 15px;
+    text-indent: -23px;
+}
+
+#dhl_parcel_map { height:500px;}

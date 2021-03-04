@@ -1,0 +1,3 @@
+[submodule "dependencies/dhl_ws_library"]
+	path = dependencies/dhl_ws_library
+	url = https://bitbucket.org/skrey-ecommerce/dhl_ws_library.git

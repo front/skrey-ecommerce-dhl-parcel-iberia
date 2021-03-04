@@ -1,0 +1,375 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: DHL Parcel Iberia Shipping Plugin\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-01-28 11:32+0000\n"
+"PO-Revision-Date: 2019-01-29 16:40+0000\n"
+"Language-Team: \n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.2.1\n"
+"X-Loco-Version: 2.2.0; wp-4.9.7\n"
+"Last-Translator: \n"
+"Language: pt_PT\n"
+
+#: classes/views/dhl-settings-page.php:41
+msgid "Account Id"
+msgstr "Conta DHL"
+
+#: classes/views/html-shipping-method-rules-table.php:332
+msgid "Add New"
+msgstr "Adicionar Nova"
+
+#: dhl-parsel-plugin.php:223
+msgid "Address can't have more that 40 characters!"
+msgstr "Endereço não pode ter mais que 40 caracteres!"
+
+#. Description of the plugin
+msgid "Adds functionalities"
+msgstr "Adiciona funcionalidades"
+
+#: classes/views/html-shipping-method-rules-table.php:69
+msgid "Based on"
+msgstr "Com base no"
+
+#: classes/views/html-checkout-page.php:14
+msgid "Choose a DHL service point"
+msgstr "Escolha um Servicepoint DHL"
+
+#: classes/views/dhl-settings-page.php:85
+msgid "Company Name"
+msgstr "Nome da Empresa"
+
+#: classes/views/dhl-settings-page.php:326
+msgid "Company VAT number"
+msgstr "NIF da Empresa"
+
+#: classes/views/dhl-settings-page.php:442
+msgid "Configuration for accessing the DHL Web Services"
+msgstr "Configuração para os Webservices da DHL"
+
+#: classes/views/dhl-settings-page.php:448
+msgid "Configuration of the pick-up point address"
+msgstr "Configuração do endereço do local para recolha"
+
+#: classes/views/html-shipping-method-rules-table.php:83
+msgid "Cost per Order"
+msgstr "Preço por encomenda"
+
+#: dhl-parsel-plugin.php:277
+msgid "Create and/or print return shipping label"
+msgstr "Criar e/ou imprimir etiqueta de envio de retorno"
+
+#: classes/views/dhl-settings-page.php:352
+msgid "Create Return Label"
+msgstr "Criar etiqueta de envio de retorno"
+
+#: classes/views/html-shipping-method-rules-table.php:161
+msgid "Delete selected rule"
+msgstr "Eliminar regra selecionada"
+
+#: classes/dhl-cash-on-delivery-gateway.php:74
+msgid "Description"
+msgstr "Descrição"
+
+#: classes/dhl-cash-on-delivery-gateway.php:70
+msgid "DHL Cash On Delivery"
+msgstr "DHL Cash On Delivey"
+
+#: classes/dhl-cash-on-delivery-gateway.php:45
+msgid "DHL Parcel Cash on Delivery"
+msgstr "DHL Parcel Cash on Delivery"
+
+#. Name of the plugin
+msgid "DHL Parcel Iberia Shipping Plugin"
+msgstr "DHL Parcel Iberia Shipping Plugin"
+
+#: classes/views/reference-field-meta-box.php:11
+msgid "DHL Reference Field"
+msgstr "Referência DHL"
+
+#: classes/views/dhl-settings-page.php:21
+msgid "DHL WS Credentials"
+msgstr "Credenciais DHL Webservice"
+
+#: classes/dhl-cash-on-delivery-gateway.php:62
+msgid "Enable DHL COD Payment method"
+msgstr "Permitir método de pagamento COD"
+
+#: classes/dhl-cash-on-delivery-gateway.php:60
+msgid "Enabled"
+msgstr "Permitido"
+
+#: classes/views/html-shipping-method-rules-table.php:80
+msgid ""
+"Enter maximum value for the &quot;Based on&quot; parameter. Value based on "
+"the price will be calculated by WooCommerce tax settings &quot;Display "
+"prices during cart and checkout&quot;"
+msgstr ""
+"Introduza um valor máximo para o &quot;Baseado no parametro &quot;. O valor "
+"com base no preço será calculado pelas configurações de taxas do WooCommerce "
+"&quot;Apresentar preços no carrinho e no checkout&quot;"
+
+#: classes/views/html-shipping-method-rules-table.php:75
+msgid ""
+"Enter minimum value for the &quot;Based on&quot; parameter. Value based on "
+"the price will be calculated by WooCommerce tax settings &quot;Display "
+"prices during cart and checkout&quot;"
+msgstr ""
+"Introduza um valor mínimo para o &quot;Baseado no parametro &quot;. O valor "
+"com base no preço será calculado pelas configurações de taxas do WooCommerce "
+"&quot;Apresentar preços no carrinho e no checkout&quot;"
+
+#: classes/views/html-shipping-method-rules-table.php:84
+msgid "Enter shipment cost for this rule."
+msgstr "Introduza preço do envio para esta regra."
+
+#: classes/views/dhl-settings-page.php:365
+msgid "Fixed Pickup"
+msgstr "Recolha Fixa"
+
+#: classes/views/dhl-settings-page.php:404
+msgid "Google Map API Configuration"
+msgstr "Configuração Google Map API"
+
+#: classes/views/dhl-settings-page.php:472
+msgid "Google Maps Api Configuration"
+msgstr "Configuração Google Map API"
+
+#: classes/views/dhl-settings-page.php:411
+msgid "Google Maps API Key"
+msgstr "Google Maps API Key"
+
+#: classes/views/dhl-settings-page.php:281
+msgid "Has Lunch Break"
+msgstr "Tem intervalo para almoço"
+
+#: classes/dhl-cash-on-delivery-gateway.php:46
+msgid "Have your customers pay upon delivery."
+msgstr "O seu cliente paga no ato da entrega."
+
+#: classes/views/html-shipping-method-rules-table.php:65
+msgid "Id"
+msgstr "Id"
+
+#: classes/views/html-shipping-method-rules-table.php:160
+msgid "Insert rule"
+msgstr "Inserir regra"
+
+#: classes/dhl-cash-on-delivery-gateway.php:81
+msgid "Instructions"
+msgstr "Instruções"
+
+#: classes/dhl-cash-on-delivery-gateway.php:83
+msgid "Instructions that will be added to the thank you page."
+msgstr "Intstruções que "
+
+#: classes/views/dhl-settings-page.php:65
+msgid "Key"
+msgstr "Chave"
+
+#: classes/views/dhl-settings-page.php:397
+msgid "Manual"
+msgstr "Manual"
+
+#: classes/views/html-shipping-method-rules-table.php:79
+msgid "Max"
+msgstr "Max"
+
+#: classes/views/html-shipping-method-rules-table.php:74
+msgid "Min"
+msgstr "Mín"
+
+#: classes/views/dhl-settings-page.php:288
+#: classes/views/dhl-settings-page.php:359
+#: classes/views/dhl-settings-page.php:372
+msgid "No"
+msgstr "Não"
+
+#: dhl-parsel-plugin.php:217
+msgid "No service point selected for shipping!"
+msgstr "Nenhum Servicepoint selecionado para envio!"
+
+#: classes/views/dhl-settings-page.php:397
+msgid "Order Id"
+msgstr "Nº Encomenda"
+
+#: classes/views/dhl-settings-page.php:338
+msgid "Order State To Create Shipping Label"
+msgstr "Estado da encomenda para Criar a Etiqueta de Envio"
+
+#: classes/views/dhl-settings-page.php:319
+msgid "Other Configurations"
+msgstr "Outras Configurações"
+
+#: classes/dhl-cash-on-delivery-gateway.php:77
+#: classes/dhl-cash-on-delivery-gateway.php:84
+msgid "Pay upon delivery."
+msgstr "Pagar no ato de entrega."
+
+#: classes/dhl-cash-on-delivery-gateway.php:69
+msgid "Payment method description that the customer will see on your checkout."
+msgstr ""
+"Descrição do método de pagamento que o seu cliente irá ver no checkout."
+
+#: classes/dhl-cash-on-delivery-gateway.php:76
+msgid "Payment method description that the customer will see on your website."
+msgstr "Descrição do método de pagamento que o seu cliente irá ver no site."
+
+#: classes/dhl-cash-on-delivery-gateway.php:144
+msgid "Payment to be made upon delivery."
+msgstr "Pagamento a fazer no ato da entrega."
+
+#. as of WP 4.6 this value is used only internally
+#: classes/views/dhl-settings-page.php:29
+msgid "Pick-up Depot"
+msgstr "Código Origem"
+
+#: classes/views/dhl-settings-page.php:121
+msgid "Pick-up Point - Additional Information"
+msgstr "Local para Recolha - Informação adicional"
+
+#: classes/views/dhl-settings-page.php:170
+msgid "Pick-Up Point Additional Information"
+msgstr "Local para Recolha - Informação Adicional"
+
+#: classes/views/dhl-settings-page.php:454
+msgid "Pick-up point additional information"
+msgstr "Local para Recolha - Informação Adicional"
+
+#: classes/views/dhl-settings-page.php:78
+msgid "Pick-Up Point Address Configuration"
+msgstr "Configuração de Endereço do Local para Recolha"
+
+#: classes/views/dhl-settings-page.php:269
+msgid "Pick-up Point Closing Hours"
+msgstr "Hora de fecho do Local para Recolha"
+
+#: classes/views/dhl-settings-page.php:225
+msgid "Pick-up Point Contact Person's Firstname"
+msgstr "Nome da Pessoa no Local para Recolha"
+
+#: classes/views/dhl-settings-page.php:237
+msgid "Pick-up Point Contact Person's Lastname"
+msgstr "Apelido da Pessoa no Local para Recolha"
+
+#: classes/views/dhl-settings-page.php:157
+msgid "Pick-up Point Country"
+msgstr "País do Local para Recolha"
+
+#: classes/views/dhl-settings-page.php:213
+msgid "Pick-up Point Email"
+msgstr "E-mail da Pessoa no Local para Recolha"
+
+#: classes/views/dhl-settings-page.php:189
+msgid "Pick-up Point Especial Instructions For DHL"
+msgstr "Instruções Especiais para Recolha"
+
+#: classes/views/dhl-settings-page.php:109
+msgid "Pick-up Point House Number"
+msgstr "Número da Porta do Local para Recolha"
+
+#: classes/views/dhl-settings-page.php:294
+msgid "Pick-up Point Lunch Break Beginning"
+msgstr "Inicio do intervalo de Almoço do Local para Recolha"
+
+#: classes/views/dhl-settings-page.php:306
+msgid "Pick-up Point Lunch Break Ending"
+msgstr "Fim do intervalo de Almoço do Local para Recolha"
+
+#: classes/views/dhl-settings-page.php:257
+msgid "Pick-up Point Opening Hours"
+msgstr "Hora de Abertura do Local para Recolha"
+
+#: classes/views/dhl-settings-page.php:466
+msgid "Pick-up point other configurations"
+msgstr "Outras configurações do Local para Recolha"
+
+#: classes/views/dhl-settings-page.php:177
+msgid "Pick-up Point Parcel Location"
+msgstr "Localização dos envios no Local para Recolha"
+
+#: classes/views/dhl-settings-page.php:145
+msgid "Pick-up Point Postal Code"
+msgstr "Código Postal do Local para Recolha"
+
+#: classes/views/dhl-settings-page.php:97
+msgid "Pick-up Point Street"
+msgstr "Nome da Rua do Local para Recolha"
+
+#: classes/views/dhl-settings-page.php:201
+msgid "Pick-up Point Telephone Number"
+msgstr "Telefone do Local para Recolha"
+
+#: classes/views/dhl-settings-page.php:133
+msgid "Pick-up Point Town"
+msgstr "Cidade do Local para Recolha"
+
+#: classes/views/dhl-settings-page.php:250
+msgid "Pick-up Point Working Hours"
+msgstr "Horário de Trabalho do Local para Recolha"
+
+#: classes/views/dhl-settings-page.php:460
+msgid "Pick-up point working hours"
+msgstr "Horário de Trabalho do Local para Recolha"
+
+#: classes/views/html-shipping-method-rules-table.php:7
+msgid "Price"
+msgstr "Preço"
+
+#: dhl-parsel-plugin.php:276
+msgid "Print shipping label"
+msgstr "Imprimir Etiqueta de Envio"
+
+#: classes/views/dhl-settings-page.php:390
+msgid "Reference field filling method"
+msgstr "Método de preenchimento da Referência de Envio"
+
+#: classes/views/dhl-settings-page.php:378
+msgid "Same day pick up hour"
+msgstr "Hora limite de marcação de recolha"
+
+#: classes/views/html-checkout-page.php:25
+msgid "Selected Service Point :"
+msgstr "Servicepoint selecionado:"
+
+#: classes/views/dhl-settings-page.php:638
+msgid "Settings Saved"
+msgstr "Configurações guardadas"
+
+#: classes/views/html-shipping-method-rules-table.php:70
+msgid "Shipping cost will be calculated based on the selected parameter."
+msgstr "Preço de Envio vai ser calculado baseado nos parametros selecionados"
+
+#. Author of the plugin
+msgid "Skrey Software"
+msgstr "Skrey Software"
+
+#: classes/views/html-shipping-method-rules-table.php:66
+msgid "The shipping rule id"
+msgstr "O Id da regra de envio"
+
+#: classes/dhl-cash-on-delivery-gateway.php:67
+msgid "Title"
+msgstr "Título"
+
+#: classes/views/dhl-settings-page.php:53
+msgid "User Id"
+msgstr "ID Utilizador"
+
+#: classes/views/html-shipping-method-rules-table.php:8
+msgid "Weight"
+msgstr "Peso"
+
+#. URI of the plugin
+#. Author URI of the plugin
+msgid "www.skrey-software.com"
+msgstr "www.skrey-software.com"
+
+#: classes/views/dhl-settings-page.php:288
+#: classes/views/dhl-settings-page.php:359
+#: classes/views/dhl-settings-page.php:372
+msgid "Yes"
+msgstr "Sim"
