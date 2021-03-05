@@ -214,7 +214,7 @@
 				});
 				//Select row
 				var tid='';
-				jQuery('document').on('click', '#<?php echo esc_attr( $field ); ?> tbody tr' function (event) {
+				jQuery(document).on('click', '#<?php echo esc_attr( $field ); ?> tbody tr', function (event) {
 					tid=jQuery(this).attr('id');
 					jQuery('.selected').removeClass('selected');
     				jQuery('#' + tid).addClass("selected");
