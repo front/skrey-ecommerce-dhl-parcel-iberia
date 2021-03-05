@@ -428,8 +428,8 @@ function dhl_shipping_tracking_field($order){
         $url = str_replace('$year', $year, $url);
         $url = str_replace('$lang', $lang, $url);
 
-        echo '<p><strong>'.__('Tracking code').':</strong> <br/> <a id="trackAndTraceLink" href="'.esc_html($url).'">'.esc_html($tracking_code).'</a></p>
-        <p><label>'.__("Last shipping status: ") . $last_status.'</label></p>';
+        echo apply_filters( 'dhl_admin_order_tracking_code', '<p><strong>'.__('Tracking code').':</strong> <br/> <a id="trackAndTraceLink" href="'.esc_html($url).'">'.esc_html($tracking_code).'</a></p>
+        <p><label>'.__("Last shipping status: ") . $last_status.'</label></p>', $url, $tracking_code, $last_status );
     }
 
 }
@@ -462,8 +462,8 @@ function dhl_shipping_tracking_field_view_order($order_id){
         $url = str_replace('$year', $year, $url);
         $url = str_replace('$lang', $lang, $url);
 
-        echo '<p><strong>'.__('Tracking code').':</strong> <br/> <a id="trackAndTraceLink" href="'.esc_html($url).'">'.esc_html($tracking_code).'</a></p>
-        <p><label>'.__("Last shipping status: ") . $last_status.'</label></p>';
+        echo apply_filters( 'dhl_order_tracking_code', '<p><strong>'.__('Tracking code').':</strong> <br/> <a id="trackAndTraceLink" href="'.esc_html($url).'">'.esc_html($tracking_code).'</a></p>
+        <p><label>'.__("Last shipping status: ") . $last_status.'</label></p>', $url, $tracking_code, $last_status );
     }
 
 }
