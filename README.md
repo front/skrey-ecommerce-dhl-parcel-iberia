@@ -11,4 +11,4 @@ Refactor:
 * Replace `jQuery.live` by `jQuery.on` (compatibility with jQuery 1.9 and higher)
 
 Features:
-* Add `dhl_order_tracking_code` and `dhl_admin_order_tracking_code` filter
+* Add `dhl_order_tracking_code` and `dhl_admin_order_tracking_code` filters
