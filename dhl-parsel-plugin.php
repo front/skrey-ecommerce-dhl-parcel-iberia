@@ -396,7 +396,7 @@ function dhl_shipping_service_point_field($order){
 //Add custom shipping tracking field to the order details
 add_action( 'woocommerce_admin_order_data_after_shipping_address', 'dhl_shipping_tracking_field', 10, 1 );
 
-function dhl_shipping_tracking_field($order){
+function dhl_shipping_tracking_field( $order, $is_admin = true ){
     $trackingUrl = 'https://clientesparcel.dhl.es/seguimientoenvios/integra/SeguimientoDocumentos.aspx?codigo=@&anno=$year&lang=$lang';
 
     $dbh = new Database_Handler();
@@ -406,6 +406,7 @@ function dhl_shipping_tracking_field($order){
         $label = get_object_vars($label);
         $tracking_code = $label['tracking_code'];
         $tracking_data = getTrackingData($order);
+        $last_status = '';
 
         if( $tracking_data != null){
 
@@ -413,13 +414,8 @@ function dhl_shipping_tracking_field($order){
             $tracking_data = $tracking_data[0];
             if($tracking_data['events'] != null){
                 $last_status = end($tracking_data['events'])['status'];
-            } else {
-                $last_status = "";
             }
-        } else {
-            $last_status = "";
         }
-
 
         $lang = $order->get_shipping_country();
         $year = (new DateTime($label['creation_date']))->format('Y');
@@ -428,44 +424,22 @@ function dhl_shipping_tracking_field($order){
         $url = str_replace('$year', $year, $url);
         $url = str_replace('$lang', $lang, $url);
 
-        echo apply_filters( 'dhl_admin_order_tracking_code', '<p><strong>'.__('Tracking code').':</strong> <br/> <a id="trackAndTraceLink" href="'.esc_html($url).'">'.esc_html($tracking_code).'</a></p>
+        $filter = $is_admin ? 'dhl_admin_order_tracking_code' : 'dhl_order_tracking_code';
+
+        echo apply_filters( $filter, '<p><strong>'.__('Tracking code').':</strong> <br/> <a id="trackAndTraceLink" href="'.esc_html($url).'">'.esc_html($tracking_code).'</a></p>
         <p><label>'.__("Last shipping status: ") . $last_status.'</label></p>', $url, $tracking_code, $last_status );
     }
 
 }
 
 //add custom data to the view order field
-add_action( 'woocommerce_view_order', 'dhl_shipping_tracking_field_view_order', 20 );
+add_action( 'woocommerce_view_order', 'dhl_shipping_tracking_field_view_order', 20, 1 );
 
-function dhl_shipping_tracking_field_view_order($order_id){
-    $trackingUrl = 'https://clientesparcel.dhl.es/seguimientoenvios/integra/SeguimientoDocumentos.aspx?codigo=@&anno=$year&lang=$lang';
-
-
-    $dbh = new Database_Handler();
-    $label = $dbh->get_labels_by_order_id($order_id,false);
-
-    if(count($label)){
-        $label = get_object_vars($label);
-        $tracking_code = $label['tracking_code'];
-        $order = wc_get_order($order_id);
-        $tracking_data = getTrackingData($order);
-
-        $tracking_data = dhl_parcel_arrayCastRecursive( json_decode($tracking_data) );
-        $tracking_data = $tracking_data[0];
-
-        $last_status = end($tracking_data['events'])['status'];
-
-        $lang = $order->get_shipping_country();
-        $year = (new DateTime($label['creation_date']))->format('Y');
-        $url = $trackingUrl;
-        $url = str_replace('@', $tracking_code, $url);
-        $url = str_replace('$year', $year, $url);
-        $url = str_replace('$lang', $lang, $url);
-
-        echo apply_filters( 'dhl_order_tracking_code', '<p><strong>'.__('Tracking code').':</strong> <br/> <a id="trackAndTraceLink" href="'.esc_html($url).'">'.esc_html($tracking_code).'</a></p>
-        <p><label>'.__("Last shipping status: ") . $last_status.'</label></p>', $url, $tracking_code, $last_status );
+function dhl_shipping_tracking_field_view_order( $order_id ) {
+    $order = wc_get_order( $order_id );
+    if ( $order ) {
+        dhl_shipping_tracking_field( $order, false );
     }
-
 }
 
 
