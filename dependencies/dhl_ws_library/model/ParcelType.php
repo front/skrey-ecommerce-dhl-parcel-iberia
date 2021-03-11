@@ -20,6 +20,9 @@ class ParcelType {
     public function getParcelType($total_weight, $dimensions = array()){
         $dimensions = apply_filters( 'dhl_get_order_dimensions', $dimensions, $total_weight );
 
+        $this->_weight_rules    = apply_filters( 'dhl_set_weight_rules', $this->_weight_rules );
+        $this->_dimension_rules = apply_filters( 'dhl_set_dimension_rules', $this->_dimension_rules );
+
         //Get minimum dimensions needed
         if(!empty($dimensions)) {
             $packer = new Packer($dimensions);
