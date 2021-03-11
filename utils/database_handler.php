@@ -375,6 +375,10 @@ class Database_Handler {
     public function get_shipping_rules_by_zone_id_and_criteria($zone_id, $weight, $price, $shipping_method) {
         global $wpdb;
 
+        // The final weight is the greater of the real weight and
+        // the volumetric weight.
+        $weight = apply_filters( 'dhl_calcute_final_weight', $weight );
+
         //Name of the database
         $table_name = $wpdb->prefix . self::SHIPPING_RULES_TABLE_NAME;
 
