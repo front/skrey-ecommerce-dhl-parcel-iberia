@@ -330,13 +330,16 @@ class DhlClient{
             $servicepoints=$ws->getParcelLocations($dto);
 
             $servicepoints =  json_decode($servicepoints);
-            $i=0;
-            foreach($servicepoints as $servicepoint){
-                foreach($servicepoint->openingTimes as $time){
-                    $servicepoints[$i]->openingTimesByDay[$time->weekDay][]=$time;
+            if ( $servicepoints ) {
+                $i=0;
+                foreach($servicepoints as $servicepoint){
+                    foreach($servicepoint->openingTimes as $time){
+                        $servicepoints[$i]->openingTimesByDay[$time->weekDay][]=$time;
+                    }
+                    $i++;
                 }
-                $i++;
             }
+
             return $servicepoints;
         }catch(Exception $e){
                 throw($e);
