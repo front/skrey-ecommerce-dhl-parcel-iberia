@@ -96,7 +96,6 @@
             						$key = 'method_rules[' . $count_rules . '][id]';
             						$args = array(
             							'type' 		=> 'text',
-            							'options' 	=> $options_id,
             						);
             						$value = '';
             						if ( isset( $rule['id'] ) ) {
