@@ -3,6 +3,19 @@
 Original plugin by [Skrey Software](www.skrey-software.com) version 1.0.19.
 
 ## Changelog
+
+### 12-03-2021
+
+Fixes:
+
+* Removed unset options (admin rules table)
+* Added variable check before iterate it (service points)
+
+Features:
+
+* Added `dhl_set_weight_rules` and `dhl_set_dimension_rules` hooks to filter hardcoded parcel types rules
+* Added `dhl_calcute_final_weight` filter before getting shipping rule
+
 ### 11-03-2021
 
 Fixes:
