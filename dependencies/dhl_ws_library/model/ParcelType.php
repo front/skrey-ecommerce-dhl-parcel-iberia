@@ -6,7 +6,7 @@ class ParcelType {
 
     private $_weight_rules;
     private $_dimension_rules;
-    
+
     public function __construct() {
         $this->setRules();
     }
@@ -18,6 +18,8 @@ class ParcelType {
      * @return response parcel type or null if no parcel type is aplicable
      */
     public function getParcelType($total_weight, $dimensions = array()){
+        $dimensions = apply_filters( 'dhl_get_order_dimensions', $dimensions, $total_weight );
+
         //Get minimum dimensions needed
         if(!empty($dimensions)) {
             $packer = new Packer($dimensions);
@@ -41,7 +43,7 @@ class ParcelType {
                         unset($hold_dhl_dims[array_search(max($hold_dhl_dims), $hold_dhl_dims)]);
                         unset($hold_min_dimensions[array_search(max($hold_min_dimensions), $hold_min_dimensions)]);
                     }
-                    
+
 
                 }
             }
@@ -129,7 +131,7 @@ class ParcelType {
                     "height" => 80
                 )
             )
-        );            
+        );
     }
 
 }
