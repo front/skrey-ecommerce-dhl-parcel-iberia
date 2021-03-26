@@ -4,6 +4,16 @@ Original plugin by [Skrey Software](www.skrey-software.com) version 1.0.19.
 
 ## Changelog
 
+### 26-03-2021
+
+Fixes:
+
+* Added small fixed in checkout js script
+
+Features:
+
+* Added `dhl_tracking_url` filter for tracking url
+
 ### 12-03-2021
 
 Fixes:
