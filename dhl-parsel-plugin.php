@@ -397,7 +397,7 @@ function dhl_shipping_service_point_field($order){
 add_action( 'woocommerce_admin_order_data_after_shipping_address', 'dhl_shipping_tracking_field', 10, 1 );
 
 function dhl_shipping_tracking_field( $order, $is_admin = true ){
-    $trackingUrl = 'https://clientesparcel.dhl.es/seguimientoenvios/integra/SeguimientoDocumentos.aspx?codigo=@&anno=$year&lang=$lang';
+    $trackingUrl = apply_filters( 'dhl_tracking_url', 'https://clientesparcel.dhl.es/seguimientoenvios/integra/SeguimientoDocumentos.aspx?codigo=@&anno=$year&lang=$lang' );
 
     $dbh = new Database_Handler();
     $label = $dbh->get_labels_by_order_id($order->get_id(),false);
