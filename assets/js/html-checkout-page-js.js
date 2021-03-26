@@ -51,24 +51,24 @@ function initMap(){
 };
 
 function createHomeMarker(address)
-{   
+{
     var geocoder = new google.maps.Geocoder();
     geocoder.geocode( { "address": address}, function(results, status) {
-        latlngbounds.extend(results[0].geometry.location);
         if (status == google.maps.GeocoderStatus.OK) {
+            latlngbounds.extend(results[0].geometry.location);
             map.setCenter(results[0].geometry.location);
             new google.maps.Marker({
                 map: parcels_map,
                 position: results[0].geometry.location,
                 icon:path+'assets/img/home.png',
                 zIndex:99999999
-            }); 
+            });
         }
-    }); 
+    });
 };
 
 function initParcelMarkers(address, cp, city, cust_country,searchQuery)
-{    
+{
         var data = {
             'action' : 'get_parcel_locations',
             'codePostal': cp,
@@ -77,7 +77,7 @@ function initParcelMarkers(address, cp, city, cust_country,searchQuery)
             'country': cust_country,
             'searchQuery': searchQuery,
         };
-        
+
         jQuery.ajax({
             url: ajax_obj.my_ajax_url,
             data: data,
@@ -90,6 +90,11 @@ function createServicePoints(json)
 {
     var htmlForTxtSection='';
     var ldata=JSON.parse(json);
+
+    if (!ldata) {
+        return false;
+    }
+
     if(ldata.error){
         showError(ldata.error);
     }else{
@@ -99,7 +104,7 @@ function createServicePoints(json)
 
             createParcelMarker(ldata[i]);
 
-            
+
             dhl_parcel_locs[ldata[i].id]=ldata[i];
 
             htmlForTxtSection+='<div class="checkbox"><label class="service_points_label" ><input type="radio" class="service_points_radio" name="dhl_loc_select" id="parcel_shop_id'
@@ -114,7 +119,7 @@ function createServicePoints(json)
                 +' - '+ldata[i].address.street+' '+ldata[i].address.number+' - '+ldata[i].address.postalCode+' '+ldata[i].address.city+'</label></div>';
         }
 
-        
+
         jQuery('#parcel_loc_txt').html(htmlForTxtSection);
 
         if(ldata.length<1) {
@@ -124,7 +129,7 @@ function createServicePoints(json)
             setParcelAndUpdatePrice(ldata[0].id,dhl_parcel_locs[ldata[0].id]);
             changeSelectedServicePointField(dhl_parcel_locs[ldata[0].id]);
         }
-        
+
 
         jQuery('input[name="dhl_loc_select"]').change(function() {
             var parcel_shop_id=jQuery('input[name="dhl_loc_select"]:checked').val();
@@ -132,7 +137,7 @@ function createServicePoints(json)
             changeSelectedServicePointField(dhl_parcel_locs[parcel_shop_id]);
             openParcelInfoWindow(parcel_shop_id);
         });
-        
+
     }
 
     parcels_map.fitBounds(latlngbounds);
@@ -182,7 +187,7 @@ function openParcelInfoWindow(parcel_shop_id) {
         iwcontent = iwcontent +'<p class="text-right"><input type="hidden" name="parcel_shop_id" value="'+dhl_parcel_locs[parcel_shop_id].id
             +'"/><a class="button_large buttonSelectParcel" href="javascript:;" class="pull-right">'+select_lang+'</a></p>'
             +'</div>';
-            
+
     infowindow = new google.maps.InfoWindow({
         content: iwcontent
     });
@@ -206,7 +211,7 @@ function openingHoursByDay(parcel_shop_id,day){
     }
     else{
         htlm+='<td>'
-        
+
         +'</td>';
     }
     return htlm;
@@ -229,7 +234,7 @@ function showError(error){
 }
 
 function setParcelAndUpdatePrice(parcel_shop_id,servicePoint)
-{   
+{
     data={
         'action' : 'set_service_point_and_update_shipping_price',
         'parcel_shop_id' :parcel_shop_id,
@@ -238,7 +243,7 @@ function setParcelAndUpdatePrice(parcel_shop_id,servicePoint)
         'city': servicePoint.address.city,
         'country': servicePoint.address.countryCode,
     }
-    
+
     jQuery.ajax({
         url: ajax_obj.my_ajax_url,
         data: data,
@@ -259,7 +264,7 @@ function getHomeLocation(){
     var data = {
         'action' : 'update_home_location'
     };
-    
+
     return jQuery.ajax({
         url: ajax_obj.my_ajax_url,
         data: data,
@@ -277,7 +282,7 @@ function saveHomeLocation(json){
         city : response["city"],
         country : response["countryCode"]
     }
-    
+
 }
 
 function reloadCheckout(){
@@ -285,7 +290,7 @@ function reloadCheckout(){
 }
 
 function changeSelectedServicePointField(service_point_info){
-    jQuery("#selected_service_point_sp").text(service_point_info.name+' - '+service_point_info.address.street+' '+service_point_info.address.number+' - '+service_point_info.address.postalCode+' '+service_point_info.address.city); 
+    jQuery("#selected_service_point_sp").text(service_point_info.name+' - '+service_point_info.address.street+' '+service_point_info.address.number+' - '+service_point_info.address.postalCode+' '+service_point_info.address.city);
 }
 
 jQuery(document).ready(function() {
@@ -310,7 +315,7 @@ jQuery(document).ready(function() {
             searchButtonClick();
         }
       });
-    
+
 });
 
 jQuery( document ).on( 'updated_checkout', function( e, data ) {
