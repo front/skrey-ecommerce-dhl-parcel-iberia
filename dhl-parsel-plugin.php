@@ -4,8 +4,8 @@ Plugin Name: DHL Parcel Iberia Shipping Plugin
 Plugin URI: www.skrey-software.com
 Description: Adds functionalities
 Version: 1.0.19
-Author: Skrey Software
-Author URI: www.skrey-software.com
+Author: Skrey Software, Frontkom
+Author URI: www.skrey-software.com, frontkom.com
 */
 define ( 'DHL_PARCEL_VERSION', '1.0.19' );
 
