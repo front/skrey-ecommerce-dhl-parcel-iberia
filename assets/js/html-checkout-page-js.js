@@ -303,7 +303,7 @@ jQuery(document).ready(function() {
         }
     });
     //Disable submit order on "enter"
-    jQuery("form").keypress(function(e) {
+    jQuery("form[name='checkout']").keypress(function(e) {
         //Enter key
         if (e.which == 13) {
           return false;
