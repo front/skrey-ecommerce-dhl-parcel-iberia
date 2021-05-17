@@ -4,6 +4,12 @@ Original plugin by [Skrey Software](www.skrey-software.com) version 1.0.19.
 
 ## Changelog
 
+### 17-05-2021
+
+Fixes:
+
+* Fixed form submit with "Enter" key
+
 ### 26-03-2021
 
 Fixes:
