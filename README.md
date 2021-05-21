@@ -4,6 +4,13 @@ Original plugin by [Skrey Software](www.skrey-software.com) version 1.0.19.
 
 ## Changelog
 
+### 21-05-2021
+
+Fixes:
+
+* Prevented shipping method check on empty sessions
+* Cached value of DHL capability options
+
 ### 17-05-2021
 
 Fixes:
