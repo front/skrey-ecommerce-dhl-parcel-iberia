@@ -26,7 +26,7 @@ function dhl_cod_gateway_init() {
 			$this->title              = $this->get_option( 'title' );
 			$this->description        = $this->get_option( 'description' );
 			$this->instructions       = $this->get_option( 'instructions' );
-			
+
 
 			add_action( 'woocommerce_update_options_payment_gateways_' . $this->id, array( $this, 'process_admin_options' ) );
 			add_action( 'woocommerce_thankyou_' . $this->id, array( $this, 'thankyou_page' ) );
@@ -53,7 +53,7 @@ function dhl_cod_gateway_init() {
 		 */
 		public function init_form_fields() {
 
-			
+
 
 			$this->form_fields = apply_filters( 'wc_dhl_cod_form_fields', array(
 				'enabled'			 => array(
@@ -114,27 +114,29 @@ function dhl_cod_gateway_init() {
 
 			$needs_shipping = apply_filters( 'woocommerce_cart_needs_shipping', $needs_shipping );
 
-			// Only apply if is home delivery
+			// Only apply if is home delivery.
 			if ( WC()->session != null ) {
 				$chosen_shipping_methods_session = WC()->session->get( 'chosen_shipping_methods' );
-				
-				global $woocommerce;
-				$dhl_client = new DhlClient();
-				$cart = $woocommerce->cart;
-				
-				if(in_array("dhl_normal_shipping_method", $chosen_shipping_methods_session)){
-					$isCODAvaliable = $dhl_client->isCodAvailable($cart, false);
-				} else if (in_array("dhl_service_point_shipping_method", $chosen_shipping_methods_session)){
-					$isCODAvaliable = $dhl_client->isCodAvailable($cart, true);
-				}
 
-				if($chosen_shipping_methods_session){
-					if ( !$isCODAvaliable || !$needs_shipping) {
-							return false;
+				if ( ! empty( $chosen_shipping_methods_session ) ) {
+					global $woocommerce;
+					$dhl_client = new DhlClient();
+					$cart = $woocommerce->cart;
+
+					if ( in_array( "dhl_normal_shipping_method", $chosen_shipping_methods_session ) ) {
+						$isCODAvailable = $dhl_client->isCodAvailable( $cart, false );
+					} else if ( in_array( "dhl_service_point_shipping_method", $chosen_shipping_methods_session ) ) {
+						$isCODAvailable = $dhl_client->isCodAvailable( $cart, true );
+					} else {
+						$isCODAvailable = false;
+					}
+
+					if ( ! $isCODAvailable || ! $needs_shipping ) {
+						return false;
 					}
 				}
 			}
-			
+
 			return parent::is_available();
 		}
 
@@ -143,7 +145,7 @@ function dhl_cod_gateway_init() {
 
 			// Mark as processing or on-hold (payment won't be taken until delivery).
 			$order->update_status( apply_filters( 'woocommerce_dhl_cod_process_payment_order_status', 'on-hold' , $order ), __( 'Payment to be made upon delivery.', 'dhl_parcel_iberia_woocommerce_plugin' ) );
-			
+
 			// Reduce stock levels.
 			wc_reduce_stock_levels( $order_id );
 
@@ -181,7 +183,7 @@ function dhl_cod_gateway_init() {
 
 		public function validate_fields(){
 			return true;
-		 
+
 		}
 	}
 }
