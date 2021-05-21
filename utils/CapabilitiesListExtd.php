@@ -3,7 +3,7 @@
 include_once plugin_dir_path(__DIR__).'/dependencies/dhl_ws_library/model/CapabilitiesList.php';
 
 class CapabilitiesListExtd extends CapabilitiesList{
-    
+
     private $capabilitiesMap = array();
     const MAX_CACHE_LIFETIME_HOURS = 24;
 
@@ -35,16 +35,37 @@ class CapabilitiesListExtd extends CapabilitiesList{
         $capability->toCountryCode = $capability_entry->toCountryCode;
         $capability->returnUrl = $capability_entry->returnUrl;
         $capability->timeStamp = $capability_entry->creation_time;
-        $capability->product = $this->loadCapabilityProduct($capability_entry->id);
-        $capability->parcelType = $this->loadCapabilityParcelType($capability_entry->id);
-        $capability->options = $this->loadCapabilityOptions($capability_entry->id);
+
+        // Capability Product.
+	    $capability->product = wp_cache_get( 'dhl_capability_product' );
+	    if (empty($capability->product)) {
+		    $capability->product = $this->loadCapabilityProduct( $capability_entry->id );
+		    // Cache the value for 24h.
+		    wp_cache_set( 'dhl_capability_product', $capability->product, '', 86400 );
+	    }
+
+        // Capability Parcel Type.
+	    $capability->parcelType = wp_cache_get( 'dhl_capability_parcel_type' );
+	    if (empty($capability->parcelType)) {
+		    $capability->parcelType = $this->loadCapabilityParcelType( $capability_entry->id );
+		    // Cache the value for 24h.
+		    wp_cache_set( 'dhl_capability_parcel_type', $capability->parcelType, '', 86400 );
+	    }
+
+	    // Capability options.
+	    $capability->options = wp_cache_get( 'dhl_capability_options' );
+	    if ( empty( $capability->options ) ) {
+		    $capability->options = $this->loadCapabilityOptions( $capability_entry->id );
+		    // Cache the value for 24h.
+		    wp_cache_set( 'dhl_capability_options', $capability->options, '', 86400 );
+	    }
 
         return $capability;
     }
 
     private function loadCapabilityProduct($capability_id){
         global $wpdb;
-        
+
         $table_name = $wpdb->prefix . "dhl_capability_product";
         $query = "SELECT * FROM $table_name WHERE capability_id = %s";
         $capability_product_entry = $wpdb->get_results( $wpdb->prepare( $query, array($capability_id) ) );
@@ -56,7 +77,7 @@ class CapabilitiesListExtd extends CapabilitiesList{
 
     private function loadCapabilityParcelType($capability_id){
         global $wpdb;
-        
+
         $table_name = $wpdb->prefix . "dhl_capability_parcel_type";
         $query = "SELECT * FROM $table_name WHERE capability_id = %s";
         $entry = $wpdb->get_results( $wpdb->prepare( $query, array($capability_id) ) );
@@ -73,7 +94,7 @@ class CapabilitiesListExtd extends CapabilitiesList{
 
     private function loadCapabilityParcelTypeDimensions($capability_parcel_type_id){
         global $wpdb;
-        
+
         $table_name = $wpdb->prefix . "dhl_capability_parcel_type_dimensions";
         $query = "SELECT * FROM $table_name WHERE parcelType_id = %s";
         $entry = $wpdb->get_results( $wpdb->prepare( $query, array($capability_parcel_type_id) ) );
@@ -83,7 +104,7 @@ class CapabilitiesListExtd extends CapabilitiesList{
         $obj = $this->buildObject('CapabilityParcelTypeDimensions',$entry_first);
         return $obj;
     }
-    
+
     private function loadCapabilityPrice($price_id){
         global $wpdb;
 
@@ -99,7 +120,7 @@ class CapabilitiesListExtd extends CapabilitiesList{
 
     private function loadCapabilityOptions($capability_id){
         global $wpdb;
-        
+
         $table_name = $wpdb->prefix . "dhl_capability_option";
         $query = "SELECT * FROM $table_name WHERE capability_id = %s";
         $entries = $wpdb->get_results( $wpdb->prepare( $query, array($capability_id) ) );
@@ -154,7 +175,7 @@ class CapabilitiesListExtd extends CapabilitiesList{
             $this->saveCapabilityProduct($capability->product, $capability_id );
             $this->saveCapabilityParcelType($capability->parcelType, $capability_id);
             $this->saveCapabilityOptions($capability->options, $capability_id);
-        }        
+        }
     }
 
     private function saveCapabilityProduct(CapabilityProduct $product, $capability_id){
@@ -214,7 +235,7 @@ class CapabilitiesListExtd extends CapabilitiesList{
         $capability_parcel_type_id = $wpdb->insert_id;
     }
 
-    private function saveCapabilityPrice(CapabilityPrice $capabilityPrice){     
+    private function saveCapabilityPrice(CapabilityPrice $capabilityPrice){
         global $wpdb;
         $table_name = $wpdb->prefix . "dhl_capability_price";
         $resp = $wpdb->insert(
@@ -250,9 +271,9 @@ class CapabilitiesListExtd extends CapabilitiesList{
                     'inputType'=> $opt->inputType
                 )
             );
-            if(!$resp) 
+            if(!$resp)
                 return false;
-            if(!$this->saveExclusions($opt->exclusions,$wpdb->insert_id)) 
+            if(!$this->saveExclusions($opt->exclusions,$wpdb->insert_id))
                 return false;
         }
         return true;
@@ -272,7 +293,7 @@ class CapabilitiesListExtd extends CapabilitiesList{
                     'code'=> $excl->code
                 )
             );
-            if(!$resp) 
+            if(!$resp)
                 return false;
         }
         return true;
